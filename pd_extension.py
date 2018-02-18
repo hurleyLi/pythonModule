@@ -1,5 +1,10 @@
 import pandas as pd
 
+
+#############################################
+## extended functions for variant annotations
+#############################################
+
 def variant_type(ref,alt):
     lref, lalt = len(ref), len(alt)
     if lref == lalt:
@@ -75,12 +80,41 @@ def clean_chr(df, chrCol = 'chr', keepX = True, keepY = True, inplace = False, e
         return d
 
 
+##################################
+## General pd dataframe extensions
+##################################
+
+def select_row(df, criteria_dict):
+    """
+    pd.DataFrame extension for selecting columns based on criteria in dictionary.
+    
+    The key in dictionary is column name or index. If the value is a list,
+    this function will match the column with the values in the list
+    """
+    
+    names = df.columns
+    
+    for key, item in criteria_dict.items():
+        if key in names:
+            if isinstance(item, list):
+                df = select_row_by_matching_list(df, key, item)
+            else:
+                df = select_row_by_value(df, key, item)
+        else:
+            raise ValueError("key name %s not in the header of dataframe" % key)
+    return df
+
+## variant selection functions
+def select_row_by_value(df, colname, value):
+    return df[df[colname] == value]
+def select_row_by_matching_list(df, colname, match_list):
+    return df[[ x in match_list for x in df[colname]]]
 
 
 
 setattr(pd.DataFrame, "add_variant_type", add_variant_type)
 setattr(pd.DataFrame, "clean_chr", clean_chr)
-
+setattr(pd.DataFrame, "select_row", select_row)
 
 
 
