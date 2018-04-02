@@ -161,15 +161,16 @@ def determine_coding_from_legendDict(x, legendDict):
          'exonic': 1,
          'intergenic': 0,
          'intronic': 0,
-         'ncRNA_exonic': 1,
-         'ncRNA_intronic': 0,
-         'ncRNA_splicing': 2,
+         'ncRNA_exonic': 3,
+         'ncRNA_intronic': 3,
+         'ncRNA_splicing': 3,
          'nonsynonymous': 1,
          'splicing': 2,
          'stopgain': 1,
          'stoploss': 1,
          'synonymous': 1,
-         'upstream': 0}
+         'upstream': 0,
+	 'nonframeshift': 0}
     elif legendDict == 'mc_to_coding_legend':
         legendDict = {'2KB_upstream_variant': 0,
          '3_prime_UTR_variant': 0,
@@ -187,7 +188,8 @@ def determine_coding_from_legendDict(x, legendDict):
     
     type_key = {0: 'non_coding',
            1: 'coding',
-           2: 'splicing'}
+           2: 'splicing',
+           3: 'ncRNA'}
     
     if x == x:
         recode = [legendDict[i] for i in x]
@@ -195,6 +197,8 @@ def determine_coding_from_legendDict(x, legendDict):
             return type_key[1]
         elif 2 in recode:
             return type_key[2]
+        elif 3 in recode:
+            return type_key[3]
         else:
             return type_key[0]
     else:
@@ -267,5 +271,9 @@ contRankScore = ['phyloP46way_primate_rankscore', 'phyloP46way_placental_ranksco
                 'GenoCanyon_rankscore','CADD_raw_rankscore','DANN_rank_score',
                  'fathmm-MKL_non-coding_rankscore','fathmm-MKL_coding_rankscore',
                 'funseq2_noncoding_rankscore']
+
+funcScore = ['deepsea_mlog2', 'integrated_fitCons_score','GenoCanyon_score','CADD_raw',
+ 'DANN_score','fathmm-MKL_non-coding_score','fathmm-MKL_coding_score','Eigen-PC-raw']
+
 
 

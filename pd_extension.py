@@ -111,10 +111,29 @@ def select_row_by_matching_list(df, colname, match_list):
     return df[[ x in match_list for x in df[colname]]]
 
 
+## plot count for unique values in a column
+def plotCount(df, group, ylim = None, textAdj = (-0.1, 10), fontsize = 15, xRotation = 0):
+    """
+    pd.DataFrame extension for ploting the count of unique values within a column
+    
+    group: column name to be plot
+    """
+
+    tmpDf = df_SNV.groupby(group).size()
+    ax = tmpDf.plot(kind='bar', legend = False)
+    plt.xticks(rotation=xRotation)
+    plt.xlabel('Category')
+    plt.ylabel('Count')
+    if ylim is not None:
+        plt.ylim(ylim)
+
+    for i, v in enumerate(list(tmpDf.squeeze())):
+        ax.text(i+textAdj[0], v + textAdj[1], str(v), fontweight = 'bold', fontsize = fontsize)
+
 
 setattr(pd.DataFrame, "add_variant_type", add_variant_type)
 setattr(pd.DataFrame, "clean_chr", clean_chr)
 setattr(pd.DataFrame, "select_row", select_row)
-
+setattr(pd.DataFrame, "plotCount", plotCount)
 
 
